@@ -14,7 +14,7 @@ public class aplus {
 			while(in.hasNext()){
 				String s = in.next();
 				out.print(s.replace('a','*') + " ");
-				System.out.print(s.replace('a','*'));
+				System.out.print(s.replace('a','*') + " ");
 			}
 			in.close();
 			out.close();
@@ -22,7 +22,6 @@ public class aplus {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Where's your file, dumbass.");
 		}
 		try {
 			Scanner in2 = new Scanner(temp);
@@ -36,7 +35,6 @@ public class aplus {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("I CAN'T FIND YOR SHITTY FILE");
 		}
 
 	}
