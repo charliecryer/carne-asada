@@ -1,0 +1,22 @@
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+public class countEXE {
+
+	public static void main(String[] args)throws IOException {
+		// TODO Auto-generated method stub
+		
+		
+		RandomAccessFile raffy = 
+			new RandomAccessFile("DATBUB.dat","rw");
+		int c = 0;
+		if(raffy.length() > 0) 
+			c = raffy.readInt();
+		raffy.seek(0);
+		raffy.writeInt(++c);
+		raffy.close();
+		System.out.println(c);
+		
+	}
+
+}
