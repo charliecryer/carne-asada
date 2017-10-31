@@ -1,0 +1,83 @@
+package application;
+	
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
+
+public class Main extends Application {
+	int x = 8;
+	int y = 8;
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			Pane root = new Pane();
+			boolean[][] arr = new boolean[16][16];
+			
+			arr[x][y]=true;
+			
+			Timeline anime = new Timeline(new KeyFrame(Duration.millis(19), e -> {
+				
+					int i = (int)(Math.random() * 4); 
+				
+					switch(i) {
+					case 0:
+						if(x < 16 && !arr[x + 1][y]){
+							Line r = new Line(x*25,y*25,(++x)*25,y*25);
+							root.getChildren().add(r);
+							arr[x][y] = true;
+						}
+						break;
+					case 1:
+						if(y < 16 && !arr[x][y + 1]){
+							Line u = new Line(x*25,y*25,x*25,(++y)*25);
+							root.getChildren().add(u);
+							arr[x][y] = true;
+						}
+						break;
+					case 2:
+						if(x > 0 && !arr[x - 1][y]){
+							Line l = new Line(x*25,y*25,(--x)*25,y*25);
+							root.getChildren().add(l);
+							arr[x][y] = true;
+						}
+						break;
+					case 3:
+						if(y > 0 && !arr[x][y - 1]){
+							Line d = new Line(x*25,y*25,(x)*25,(--y)*25);
+							root.getChildren().add(d);
+							arr[x][y] = true;
+						}
+						break;
+					
+					
+					}
+					Circle c = new Circle(x,y,5);
+				
+			}));
+			
+			
+			Scene scene = new Scene(root,400,400);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			
+			anime.setCycleCount(Timeline.INDEFINITE);
+			anime.play();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
