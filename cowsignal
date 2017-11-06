@@ -1,0 +1,47 @@
+/*
+ID: F!SH
+LANG: JAVA
+TASK: cowsignal 
+ */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class cowsignal {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		File f = new File("cowsignal.in");
+		PrintWriter out = new PrintWriter(new File("cowsignal.out"));
+		
+		Scanner in = new Scanner(f);
+		
+		int y = in.nextInt();
+		int x = in.nextInt();
+		int k = in.nextInt();
+		char[][] arr = new char[x*k][y*k];
+		
+		//Read to output array + *k while read
+		for(int j = 0; j < y; j++){
+			String s = in.next();
+			for(int vcount = 0; vcount < k; vcount++){
+				for(int i = 0; i < x; i++){
+					char c = s.charAt(i);
+					for(int hcount = 0; hcount < k; hcount++){
+						arr[i*k + hcount][j*k + vcount] = c;
+					}
+				}
+			}
+		}
+		in.close();
+		
+		//Print output array
+		for(int j = 0; j < y*k; j++){
+			for(int i = 0; i < x*k; i++){
+				out.write(arr[i][j]);
+			}
+			out.println("");
+		}
+		out.close();
+	}
+}
