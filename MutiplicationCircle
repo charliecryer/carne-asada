@@ -1,0 +1,103 @@
+package application;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+
+
+public class Main extends Application {
+	int base = 10;
+	double power = 2;
+	int XSIZE = 600;
+	int YSIZE = 600;
+	int RADIUS = XSIZE/2 - 50;
+	Point[] points = new Point[base];
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			Pane root = new Pane();
+
+			render(root);
+
+			Scene scene = new Scene(root,XSIZE,YSIZE);
+			scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+				if(key.getCode()==KeyCode.LEFT) {
+					if(base > 1){
+						base--;
+						render(root);
+					}
+				}
+				if(key.getCode()==KeyCode.RIGHT) {
+
+					base++;
+					render(root);
+
+				}
+				if(key.getCode()==KeyCode.UP) {
+
+					power += 0.1;
+					render(root);
+
+				}
+				if(key.getCode()==KeyCode.DOWN) {
+					if(power > 1){
+						power -= 0.1;
+					}
+					render(root);
+				}
+
+			});
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+	public class Point{
+		double x;
+		double y;
+		public Point(double x,double y){
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public void render(Pane root){
+		//Set Points
+		points = new Point[base];
+		for(int i = 0; i < base; i++){
+			points[i] = new Point(XSIZE/2 + RADIUS * Math.cos(Math.PI - 2 * Math.PI * -i / base ),YSIZE/2 + RADIUS * Math.sin(Math.PI - 2 * Math.PI * -i / base ));
+		}
+		//Draw Lines
+		root.getChildren().clear();
+		for(int i = 0; i < points.length; i++){
+			Line l = new Line(points[i].x,points[i].y,points[(int)(i * power) % base].x,points[(int)(i * power) % base].y);
+			l.setStroke(Color.color(0.5, 0.5, (double)(i)/points.length));
+			root.getChildren().add(l);
+		}
+		Text text = new Text(10, 10,"Base: " + base + "\tPower: " + power);
+		root.getChildren().add(text);
+		renderSwitch(root);
+	}
+	
+	public void renderSwitch(Pane root){
+		Circle c = new Circle(XSIZE/2, YSIZE/2, RADIUS);
+		for(int i = 0; i < points.length; i++){
+			root.getChildren().add(new Circle(points[i].x, points[i].y, 2));
+			root.getChildren().add(new Text(XSIZE/2 + (RADIUS + 20) * Math.cos(Math.PI - 2 * Math.PI * -i / base) - 10,YSIZE/2 + (RADIUS + 20) * Math.sin(Math.PI - 2 * Math.PI * -i / base ), "" + i));
+		}
+	}
+}
