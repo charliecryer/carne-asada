@@ -1,0 +1,30 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class CountSteps {
+
+	static Map<Integer,Integer> map = new HashMap<>();
+	static{
+		map.put(1, 1);
+	}
+		public static void main(String[] args){
+			
+			System.out.print(countMinSteps(12));
+			
+		}
+		static int countMinSteps(int n){
+			if(!map.containsKey(n)){
+				if(n % 3 == 0){
+					map.put(n, 1 + countMinSteps(n/3));
+				}
+				else if(n % 2 == 0){
+					map.put(n, 1 + countMinSteps(n/2));
+				}
+				else{
+					map.put(n, 1 + countMinSteps(n - 1));
+				}
+			}
+			return map.get(n);
+		}
+
+}
