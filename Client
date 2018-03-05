@@ -1,0 +1,96 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package chesterpum;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+/**
+ *
+ * @author ccryer
+ */
+public class Client extends Application {
+    Socket socket;
+    DataInputStream in;
+    DataOutputStream out;
+    TextArea ta = new TextArea();
+    
+    @Override
+    public void start(Stage primaryStage) {
+        
+        
+        VBox root = new VBox();
+        TextField tf = new TextField();
+        root.getChildren().addAll(tf, ta);
+        
+        Scene scene = new Scene(root, 300, 250);
+        
+        primaryStage.setTitle("Client");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        primaryStage.setOnCloseRequest(e -> {
+           System.exit(0);
+           Platform.exit();
+        });
+        
+        tf.setOnAction(e -> {
+                    try {
+                        out.writeUTF(tf.getText());
+                        tf.clear();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+        });
+        
+        new Thread(() ->{
+            try {
+                connectToServer("localhost",8000);
+                
+            } catch (IOException ex) {
+                Logger.getLogger(ChesterPum.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }).start();
+    }
+    
+    void connectToServer(String ip, int port) throws IOException{
+        socket = new Socket(ip, port);
+        out = new DataOutputStream(socket.getOutputStream());
+        in = new DataInputStream(socket.getInputStream());
+        Communicate();
+    }
+    
+    void Communicate() throws IOException{
+        while(true){
+            String message = in.readUTF();
+            Platform.runLater(() -> ta.appendText("\n"+ message));
+        }
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+}
