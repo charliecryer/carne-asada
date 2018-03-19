@@ -1,0 +1,78 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class BST {
+
+	public static void main(String[] args) {
+		int TESTCOUNT = 5;
+		
+		Queue<Integer> answers = new LinkedList<Integer>();;
+		Scanner in = new Scanner(System.in);
+		for(int inCount = 0; inCount < TESTCOUNT; inCount++) {
+			String tree = in.nextLine();
+			BSTCount bst = new BSTCount();
+			bst.addString(tree);
+			answers.add(bst.countACSL());
+		}
+		in.close();
+		while(!answers.isEmpty()) {System.out.println(answers.poll());}
+		
+	}
+
+}
+class BSTCount {
+	TreeNode root;
+	
+	public BSTCount() {}
+	
+	public void addString(String s) {
+		s = s.toUpperCase();
+		char[] sArr = s.toCharArray();
+		for(char c : sArr) {
+			if(c <= 'Z' && c >= 'A')
+				add(c);
+		}
+	}
+	
+	public void add(char c) {root = add((Character)c, root);}
+	private TreeNode add(Character c, TreeNode curr) {
+		if(curr == null) {
+			return new TreeNode(c, 1);
+		}
+		
+		if(c > curr.c) {
+			curr.right = add(c, curr.right);
+		}
+		else if(c < curr.c) {
+			curr.left = add(c, curr.left);
+		}
+		else{
+			curr.i++;	
+		}
+		return curr;
+	}
+	
+	public int countACSL() {return countACSL(root);}
+	private int countACSL(TreeNode curr) {
+		if(curr == null) {
+			return 0;
+		}
+		else if(curr.left != null ^ curr.right != null) {
+			return curr.i + countACSL(curr.left) + countACSL(curr.right);
+		}
+		return countACSL(curr.left) + countACSL(curr.right);
+	}
+}
+class TreeNode {
+  char c;
+	int i;
+	TreeNode left;
+	TreeNode right;
+	public TreeNode(char c, int i) {
+		this.c = c;
+		this.i = i;
+		this.left = null;
+		this.right = null;
+	}
+}
